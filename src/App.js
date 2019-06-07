@@ -1,26 +1,29 @@
 import React from 'react';
-import logo from './logo.svg';
+import { Route, Link, Redirect, BrowserRouter as Router } from 'react-router-dom'
+import AddCar from './components/VendorComponents/AddCar/AddCar'
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+const INIT_STATE = {
+  uploaded: false
+}
+
+class App extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = INIT_STATE;
+  }
+
+  render() {
+    return (
+      <Router>
+        <div className="App">
+          <Redirect from="/" to="/AddCar" />
+          <Route path="/AddCar" exact component={(props) => <AddCar {...props} />} />
+        </div>
+      </Router>
   );
+  }
 }
 
 export default App;
