@@ -152,6 +152,7 @@ export default class AddCar extends React.Component {
 
 	componentWillUnmount() {
 		for(var div of this.imageRefs) {
+			if(div.current == null) continue;
 			div.current.removeEventListener('dragenter', this.handleDragIn)
 		    div.current.removeEventListener('dragleave', this.handleDragOut)
 		    div.current.removeEventListener('dragover', this.handleDrag)
@@ -178,7 +179,7 @@ export default class AddCar extends React.Component {
         	e.preventDefault();
 	        let reader = new FileReader();
 	        let name = e.target.name;
-	        let file = e.target.files[0];
+			let file = e.target.files[0];
 
 	        let temp = [...this.state.images];
 
@@ -193,7 +194,7 @@ export default class AddCar extends React.Component {
         }
     }
 
-    handle360 = (e, remFlag=3) => {
+    handle360 = (e, remFlag=false) => {
     	if(remFlag) {
     		this.setState({
     			_360: ""
@@ -253,7 +254,7 @@ export default class AddCar extends React.Component {
 				})
 				return;
 			}
-		} else if(carDetails["type" === "new"]) {
+		} else if(carDetails["type"] === "new") {
 			if(carDetails["make"] !== "" &&
 			carDetails["model"] !== "" &&
 			carDetails["price"] !== "" &&
@@ -343,6 +344,14 @@ export default class AddCar extends React.Component {
 		}, () => this.isCompleted())
 	}
 
+	handleSubmit = (e) => {
+		let toSend = {};
+		toSend["images"] = this.state.images;
+		toSend["_360"] = this.state._360;
+		toSend["carDetails"] = this.state.carDetails;
+		this.props.submit(toSend);
+	}
+
 	render() {
 
 		const { imagesReq, images, carDetails } = this.state;
@@ -402,7 +411,7 @@ export default class AddCar extends React.Component {
 								        image={this.state._360}
 								        pitch={10}
 								        yaw={180}
-								        hfov={110}
+										hfov={110}
 								        autoLoad
 								        onLoad={() => {
 								            console.log("panorama loaded");
@@ -531,16 +540,13 @@ export default class AddCar extends React.Component {
 									"AddCar-details-input AddCar-left AddCar-make AddCar-done"} />						
 							</div>
 							<button
+								onClick={this.handleSubmit}
 								disabled={!this.state.submitReady}
 								className={this.state.submitReady ? "AddCar-details-submit-button" : "AddCar-details-preview-button"}>
 									Submit
 							</button>
 						</div>
 					</div>
-					{/* <div className="AddCar-details-right">
-
-						<button className="AddCar-details-preview-button">Preview</button>
-					</div> */}
 				</section></>}
 				{this.state.small &&
 				<div className="msg"><p>The website is not yet supported on smaller devices</p></div>}

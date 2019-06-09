@@ -1,0 +1,74 @@
+.PreviewCar {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient( 35deg, #1e2530, #11151c );
+}
+
+.PreviewCar-name {
+    color: green;
+    letter-spacing: 0.5px;
+    font-family: "Paytone One";
+    background: rgba(255,255,255,0.05);;
+    box-shadow: 1px 10px 30px rgba(0, 0, 0, 0.5);
+    padding: 0px 100px;
+    border-radius: 100px;
+    margin-top: 70px;
+}
+
+.PreviewCar-details {
+    height: 50vh;
+    width: 23%;
+    border-radius: 5px;
+    background: rgba(255,255,255,0.05);;
+    box-shadow: 1px 10px 30px rgba(0, 0, 0, 0.5);
+    margin: 0 40px;
+    text-align: center;
+}
+
+.PreviewCar-details h2 {
+    color: rgba(255,255,255,0.5);
+    font-family: "Paytone One";
+    font-weight: bolder;
+    letter-spacing: 0.5px;
+}
+
+.PreviewCar-details table {
+    margin: 0 auto;
+    font-family: "Montserrat";
+    font-weight: bolder;
+    font-size: 18px;
+}
+
+.PreviewCar-details td {
+    padding-bottom: 10px;
+}
+
+.PreviewCar-details-name-left {
+    text-align: right;
+    color: rgba(255,255,255,0.3);
+}
+
+.PreviewCar-details-name-right {
+    text-align: left;
+    padding-left: 10px;
+    color: rgba(255,255,255,0.55);
+}
+
+.slider {
+    width: 100%;
+    height: auto;
+    display: flex;
+    cursor: grab;
+    margin-top: 70px;
+  }
+  .slider img {
+    margin: 0 auto;
+    display: block;
+    max-width:40%;
+    max-height:60vh;
+    width: auto;
+    height: auto;
+  }

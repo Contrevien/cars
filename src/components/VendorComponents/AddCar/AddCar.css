@@ -111,7 +111,7 @@ input[type="file"] {
     max-width: 512px;
     min-height: 288px;
     max-height: 288px;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
     border-radius: 5px;
     display: flex;
     justify-content: center;
@@ -307,7 +307,7 @@ input[type="file"] {
 }
 
 @media only screen and (max-width: 1180px){
-    .AddCar-image-upload {
+    .AddCar-image-upload, .AddCar-image-uploaded img {
         min-width: 208px;
         max-width: 208px;
         min-height: 117px;
@@ -321,13 +321,19 @@ input[type="file"] {
         min-height: 252px;
     }
 
+    #AddCar-pannellum {
+        min-width: 448px;
+        max-width: 448px;
+        min-height: 252px;
+    }
+
     .AddCar-details-left {
         padding-left: 5%;
     }
 }
 
 @media only screen and (max-width: 1040px){
-    .AddCar-image-upload {
+    .AddCar-image-upload, .AddCar-image-uploaded img {
         min-width: 192px;
         max-width: 192px;
         min-height: 108px;
@@ -341,6 +347,12 @@ input[type="file"] {
         min-height: 243px;
     }
 
+    #AddCar-pannellum {
+        min-width: 432px;
+        max-width: 432px;
+        min-height: 243px;
+    }
+
     .AddCar-details-left {
         padding-left: 5%;
     }
@@ -348,7 +360,7 @@ input[type="file"] {
 
 
 @media only screen and (max-width: 768px){
-    .AddCar-image-upload {
+    .AddCar-image-upload, .AddCar-image-uploaded img {
         min-width: 144px;
         max-width: 144px;
         min-height: 81px;
@@ -365,6 +377,12 @@ input[type="file"] {
     }
 
     ._360 {
+        min-width: 336px;
+        max-width: 336px;
+        min-height: 184px;
+    }
+
+    #AddCar-pannellum {
         min-width: 336px;
         max-width: 336px;
         min-height: 184px;
