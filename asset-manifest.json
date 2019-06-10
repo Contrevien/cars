@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/cars/static/css/main.d0874f75.chunk.css",
+    "main.js": "/cars/static/js/main.05a9d846.chunk.js",
+    "main.js.map": "/cars/static/js/main.05a9d846.chunk.js.map",
+    "runtime~main.js": "/cars/static/js/runtime~main.b66e73c4.js",
+    "runtime~main.js.map": "/cars/static/js/runtime~main.b66e73c4.js.map",
+    "static/css/2.027be111.chunk.css": "/cars/static/css/2.027be111.chunk.css",
+    "static/js/2.006b94cc.chunk.js": "/cars/static/js/2.006b94cc.chunk.js",
+    "static/js/2.006b94cc.chunk.js.map": "/cars/static/js/2.006b94cc.chunk.js.map",
+    "index.html": "/cars/index.html",
+    "precache-manifest.b48c3ba66b9f76ad11cd11c5ba8ddec6.js": "/cars/precache-manifest.b48c3ba66b9f76ad11cd11c5ba8ddec6.js",
+    "service-worker.js": "/cars/service-worker.js",
+    "static/css/2.027be111.chunk.css.map": "/cars/static/css/2.027be111.chunk.css.map",
+    "static/css/main.d0874f75.chunk.css.map": "/cars/static/css/main.d0874f75.chunk.css.map",
+    "static/media/pannellum.css": "/cars/static/media/sprites.f37aa8ca.svg",
+    "static/media/eye.png": "/cars/static/media/eye.e215c0dc.png"
+  }
+}
