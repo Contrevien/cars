@@ -4,32 +4,48 @@
     flex-direction: column;
     align-items: center;
     height: 100vh;
-    background: linear-gradient( 35deg, #1e2530, #11151c );
+    background: white;
+    min-width: 100vw;
 }
 
 .PreviewCar-name {
-    color: green;
+    color: white;
     letter-spacing: 0.5px;
     font-family: "Paytone One";
-    background: rgba(255,255,255,0.05);;
-    box-shadow: 1px 10px 30px rgba(0, 0, 0, 0.5);
+    background: #222a38;
+    box-shadow: 1px 10px 20px rgba(0, 0, 0, 0.24);
     padding: 0px 100px;
     border-radius: 100px;
     margin-top: 70px;
+    position: relative;
+    text-align: center;
+    z-index: 11;
+}
+
+.PreviewCar-name div {
+    margin-bottom: -30px;
+    border-top: 30px solid rgb(0,255,0);
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    height: 0px;
+}
+
+.PreviewCar-name p {
+    margin-top: -27px;
 }
 
 .PreviewCar-details {
     height: 50vh;
     width: 23%;
     border-radius: 5px;
-    background: rgba(255,255,255,0.05);;
-    box-shadow: 1px 10px 30px rgba(0, 0, 0, 0.5);
+    /* background: rgba(255,255,255,0.05); */
+    /* box-shadow: 1px 10px 20px rgba(0, 0, 0, 0.24);  */
     margin: 0 40px;
     text-align: center;
 }
 
 .PreviewCar-details h2 {
-    color: rgba(255,255,255,0.5);
+    color: #222a38;
     font-family: "Paytone One";
     font-weight: bolder;
     letter-spacing: 0.5px;
@@ -48,27 +64,99 @@
 
 .PreviewCar-details-name-left {
     text-align: right;
-    color: rgba(255,255,255,0.3);
+    color: rgba(0,0,0,0.5);
 }
 
 .PreviewCar-details-name-right {
     text-align: left;
     padding-left: 10px;
-    color: rgba(255,255,255,0.55);
+    color: #11151c;
 }
 
 .slider {
     width: 100%;
     height: auto;
     display: flex;
+    justify-content: space-around;
     cursor: grab;
     margin-top: 70px;
+    position: relative;
+}
+
+.PreviewCar-main {
+    position: relative;
+}
+
+.PreviewCar-eye div {
+    font-size: 12px;
+    font-family: "Montserrat";
+    background: #11151c;
+    color: white;
+    border-radius: 2px;
+    padding: 2px 5px;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 1px 5px 5px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: all 0.3s; 
+    margin-top: -10px;
+}
+
+.PreviewCar-eye img {
+    max-width: 64px;
+}
+
+.PreviewCar-eye-img {
+    transition: all 0.1s;
+}
+
+  .PreviewCar-eye {
+    position: absolute;
+    right: 0;
+    top: -50px;
   }
-  .slider img {
+
+  .PreviewCar-eye:hover > .PreviewCar-eye-img {
+      transform: scale(1.1);
+      cursor: pointer;
+  }
+
+  .PreviewCar-eye:hover > .PreviewCar-eye-div {
+      opacity: 1;
+      margin-top: 0;
+  }
+
+  .PreviewCar-car {
     margin: 0 auto;
     display: block;
-    max-width:40%;
+    max-width:100%;
     max-height:60vh;
     width: auto;
     height: auto;
   }
+
+.Backdrop {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.8);
+    top: 0;
+    left: 0;
+    z-index: 999;
+}
+
+.PreviewCar-pannellum-container {
+    width: 90vw;
+    height: 90vh;
+    border-radius: 10px;
+    background: white;
+    position: fixed;
+    top: 5vh;
+    left: 5vw;
+    z-index: 1000;
+}
+
+.PreviewCar-pannellum {
+    width: 90vw;
+    border-radius: 10px;
+}

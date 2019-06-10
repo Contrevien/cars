@@ -1,17 +1,21 @@
 import React from 'react';
 import './PreviewCar.css';
-import img1 from "../../assets/carousel/images/1-removebg.png"
-import img2 from "../../assets/carousel/images/3-removebg.png"
-import img3 from "../../assets/carousel/images/5-removebg.png"
-import img4 from "../../assets/carousel/images/7-removebg.png"
-import img5 from "../../assets/carousel/images/9-removebg.png"
-import img6 from "../../assets/carousel/images/11-removebg.png"
-import img7 from "../../assets/carousel/images/13-removebg.png"
-import img8 from "../../assets/carousel/images/15-removebg.png"
-import img9 from "../../assets/carousel/images/17-removebg.png"
-import img10 from "../../assets/carousel/images/19-removebg.png"
-import img11 from "../../assets/carousel/images/21-removebg.png"
-import img12 from "../../assets/carousel/images/23-removebg.png"
+// import img1 from "../../assets/carousel/images/1-removebg.png"
+// import img2 from "../../assets/carousel/images/3-removebg.png"
+// import img3 from "../../assets/carousel/images/5-removebg.png"
+// import img4 from "../../assets/carousel/images/7-removebg.png"
+// import img5 from "../../assets/carousel/images/9-removebg.png"
+// import img6 from "../../assets/carousel/images/11-removebg.png"
+// import img7 from "../../assets/carousel/images/13-removebg.png"
+// import img8 from "../../assets/carousel/images/15-removebg.png"
+// import img9 from "../../assets/carousel/images/17-removebg.png"
+// import img10 from "../../assets/carousel/images/19-removebg.png"
+// import img11 from "../../assets/carousel/images/21-removebg.png"
+// import img12 from "../../assets/carousel/images/23-removebg.png"
+// import test from '../../assets/images/cartest-removebg.png';
+// import test360 from '../../assets/images/test.jpg';
+import eye from '../../assets/images/eye.png';
+import { Pannellum } from "pannellum-react";
 
 export default class PreviewCar extends React.Component {
     
@@ -28,7 +32,6 @@ export default class PreviewCar extends React.Component {
                 "Make": data.make,
                 "Model": data.model,
                 "Status": data.type[0].toUpperCase() + data.type.substring(1),
-                "Price": "€ " + data.price,
                 "Seats": data.seats,
                 "Doors": data.doors,
                 "Gears": data.gears,
@@ -54,25 +57,37 @@ export default class PreviewCar extends React.Component {
             }
         }
 
+        let images = this.props.data.images;
+        let rotation = true;
+        
+        for(var img of images) {
+            if(img === "") {
+                rotation = false;
+                break;
+            }
+        }
+
+        let replacement = "";
+        if(!rotation) {
+            for(var img of images) {
+                if(img !== "") {
+                    replacement = img;
+                    break;
+                }
+            }
+        }
+
         this.state = {
-            images: [
-                img1,
-                img2,
-                img3,
-                img4,
-                img5,
-                img6,
-                img7,
-                img8,
-                img9,
-                img10,
-                img11,
-                img12,
-            ],
+            images: this.props.data.images,
+            _360: this.props.data._360,
+            rotation: rotation,
+            replacement: replacement,
+            carData: this.props.data.carDetails,
             generalDetails: general,
             technicalDetails: technical,
             curr_cycle: 1,
-            curr_x: -1
+            curr_x: -1,
+            pannellum: false
         }
     }
 
@@ -138,6 +153,14 @@ export default class PreviewCar extends React.Component {
     componentDidMount() {
         var slider = document.getElementById('slider');
 
+        window.onkeydown = (e) => {
+            if(e.key === "Escape" && this.state.pannellum) {
+                this.setState({
+                    pannellum: false
+                })
+            }
+        }
+
         slider.addEventListener('mousedown', this.dragStart);
         slider.addEventListener('touchstart', this.dragStart);
         slider.addEventListener('touchmove', this.dragAction);
@@ -150,57 +173,118 @@ export default class PreviewCar extends React.Component {
         })
     }
 
+    togglePannellum = (e) => {
+        let curr = !this.state.pannellum;
+        this.setState({
+            pannellum: curr
+        })
+    }
+
     render() {
         const {images} = this.state;
         return(
-            <div className="PreviewCar">
-                <div id="slider" className="slider">
-                    <div className="PreviewCar-details">
-                        <h2>General Details</h2>
-                        <table>
-                            <tbody>
-                            {Object.keys(this.state.generalDetails).map((key, i) => {
-                                return (
-                                    <tr key={i}>
-                                        <td className="PreviewCar-details-name-left">
-                                            {key}
-                                        </td>
-                                        <td className="PreviewCar-details-name-right">
-                                            {this.state.generalDetails[key]}
-                                        </td>
-                                    </tr>    
-                                )
-                            })}
+            <>
+                <header>
+                    <h2>cars<span>360</span></h2>
+                    <nav>
+                        <ul>
+                            <li>Home</li>
+                            <li>Cars</li>
+                            <li>Contact</li>
+                            <li>About</li>
+                        </ul>
+                    </nav>
+                </header>
+                <div className="PreviewCar">
+                    <div id="slider" className="slider">
+                        <div className="PreviewCar-details">
+                            <h2>General Details</h2>
+                            <table>
+                                <tbody>
+                                {Object.keys(this.state.generalDetails).map((key, i) => {
+                                    return (
+                                        <tr key={i}>
+                                            <td className="PreviewCar-details-name-left">
+                                                {key}
+                                            </td>
+                                            <td className="PreviewCar-details-name-right">
+                                                {this.state.generalDetails[key]}
+                                            </td>
+                                        </tr>    
+                                    )
+                                })}
 
-                            </tbody>
-                        </table>
-                    </div>
-                    <img src={images[((this.state.curr_cycle + 1) / 2) - 1]} onMouseDown={() => clearInterval(this.rotate)} />
-                    <div className="PreviewCar-details">
-                        <h2>Technical Details</h2>
-                        <table>
-                            <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className="PreviewCar-main">
+                            {
+                                this.state._360 !== "" && <span className="PreviewCar-eye"> 
+                                    <img src={eye} alt="View" className="PreviewCar-eye-img"
+                                        onClick={this.togglePannellum} />
+                                    <div className="PreviewCar-eye-div">Inside</div>
+                                </span>  
+                            }
+                            {
+                                this.state.rotation ? <img className="PreviewCar-car" 
+                                src={images[((this.state.curr_cycle + 1) / 2) - 1]}
+                                onMouseDown={() => clearInterval(this.rotate)} /> : 
+                                <img className="PreviewCar-car" src={this.state.replacement} alt="" />
+                            } 
+                        </div>
+                        <div className="PreviewCar-details">
+                            <h2>Technical Details</h2>
+                            <table>
+                                <tbody>
 
-                            {Object.keys(this.state.technicalDetails).map((key, i) => {
-                                return (
-                                    <tr key={i}>
-                                        <td className="PreviewCar-details-name-left">
-                                            {key}
-                                        </td>
-                                        <td className="PreviewCar-details-name-right">
-                                            {this.state.technicalDetails[key]}
-                                        </td>
-                                    </tr>    
-                                )
-                            })}
-                            </tbody>
-                        </table>
+                                {Object.keys(this.state.technicalDetails).map((key, i) => {
+                                    return (
+                                        <tr key={i}>
+                                            <td className="PreviewCar-details-name-left">
+                                                {key}
+                                            </td>
+                                            <td className="PreviewCar-details-name-right">
+                                                {this.state.technicalDetails[key]}
+                                            </td>
+                                        </tr>    
+                                    )
+                                })}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>  
-                <div className="PreviewCar-name">
-                    <h2>{this.state.generalDetails["Make"] + " " + this.state.generalDetails["Model"]}</h2>
+                    
+                    <div className="PreviewCar-name">
+                        <h2>{this.state.generalDetails["Make"] + " " + this.state.generalDetails["Model"]}</h2>
+                        <div>
+                            <p>{"€ " + this.state.carData["price"]}</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                {this.state.pannellum && <>
+                    <div className="Backdrop" onClick={this.togglePannellum}></div>
+                    <div className="PreviewCar-pannellum-container">
+                        <Pannellum
+                            id="PreviewCar-pannellum"
+                            height="90vh"
+                            image={this.state._360}
+                            pitch={10}
+                            yaw={180}
+                            hfov={110}
+                            autoLoad
+                            onLoad={() => {
+                                console.log("panorama loaded");
+                            }}
+                        ></Pannellum>
+                        <span 
+                            className="AddCar-close" 
+                            title="Remove" 
+                            onClick={this.togglePannellum}>
+                                &#10006;
+                        </span>
+                    </div>
+                </>}
+            </>
         )
     }
 }

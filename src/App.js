@@ -6,7 +6,11 @@ import PreviewCar from './components/PreviewCar/PreviewCar';
 
 const INIT_STATE = {
   uploaded: false,
-  data: {}
+  data: {
+    images: [],
+    _360: "",
+    carDetails: {}
+  }
 }
 
 class App extends React.Component {
@@ -32,7 +36,8 @@ class App extends React.Component {
     //       headers: {
     //         'X-Api-Key': '432JntST7H2EfxH7YHn4bcbJ'
     //       },
-    //       body: {
+    //       encoding: null,
+    //       formData: {
     //         image_url: "https://i.imgur.com/VoGw5Iu.jpg",
     //         size: "auto"
     //       }

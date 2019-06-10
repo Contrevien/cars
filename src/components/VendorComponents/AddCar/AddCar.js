@@ -2,7 +2,7 @@ import React from 'react';
 import picture from '../../../assets/images/car.png';
 import _360 from '../../../assets/images/_360.png';
 import './AddCar.css';
-import { Pannellum, PannellumVideo } from "pannellum-react";
+import { Pannellum } from "pannellum-react";
 
 const INIT_STATE = {
 	dragging: false,
@@ -28,7 +28,11 @@ const INIT_STATE = {
 		equipments: []
 	},
 	submitReady: false,
-	small: false
+	small: false,
+	errors: {
+		noImages: false
+	},
+	overMe: ""
 }
 
 export default class AddCar extends React.Component {
@@ -54,6 +58,12 @@ export default class AddCar extends React.Component {
 		this.state = INIT_STATE;
 	}
 
+	toggleDrop = (e, img) => {
+		if(this.state.dragging)
+			this.setState({
+				overMe: img
+			})
+	}
 
 	handleDrag = (e) => {
 		e.preventDefault()
@@ -82,7 +92,6 @@ export default class AddCar extends React.Component {
 		e.preventDefault()
   		e.stopPropagation()
   		this.setState({dragging: false})
-
 	    let reader = new FileReader();
         let name = e.target.dataset.name;
         let file = e.dataTransfer.files[0];
@@ -186,7 +195,8 @@ export default class AddCar extends React.Component {
 	        reader.onloadend = () => {
 	        	temp[parseInt(name.split("-")[1])] = reader.result;
 	            this.setState({
-	                images: temp
+					images: temp,
+					errors: {noImages: 0}
 	            });
 	        }
 
@@ -345,6 +355,19 @@ export default class AddCar extends React.Component {
 	}
 
 	handleSubmit = (e) => {
+		let flag = false;
+		for(var img of this.state.images) {
+			if(img !== ""){
+				flag = true;
+				break;
+			}
+		}
+		if(flag === false) {
+			this.setState({
+				errors: {noImages: 1}
+			})
+			return;
+		}
 		let toSend = {};
 		toSend["images"] = this.state.images;
 		toSend["_360"] = this.state._360;
@@ -356,11 +379,18 @@ export default class AddCar extends React.Component {
 
 		const { imagesReq, images, carDetails } = this.state;
 		const imageTags = [];
+		let message = "";
+
+		if(this.state.errors.noImages === 1) message = "Please upload atleast one image";
 
 		for (let img in images) {
 			if(images[img] === "") {
 				imageTags.push(
-					<label data-name={"img-" + img} className="AddCar-image-upload" ref={this.imageRefs[img]}>
+					<label data-name={"img-" + img} className={this.state.overMe === img ? "AddCar-image-upload-over"
+						: "AddCar-image-upload"} 
+						ref={this.imageRefs[img]}
+						onMouseEnter={(e) => this.toggleDrop(e, img)}
+						onMouseLeave={(e) => this.toggleDrop(e, "")}>
 						<input type="file" name={"img-" + img} onChange={this.handleImage} />
 						<img src={picture} alt="Upload Image" className="AddCar-add-image" />
 					</label>
@@ -385,9 +415,26 @@ export default class AddCar extends React.Component {
 
 		return(
 			<div className="AddCar">
-				<header></header>
+				<header>
+                    <h2>cars<span>360</span></h2>
+                    <nav>
+                        <ul>
+                            <li>Home</li>
+                            <li>Cars</li>
+                            <li>Contact</li>
+                            <li>About</li>
+                        </ul>
+                    </nav>
+                </header>
 				{!this.state.small && <><section id="uploadImages">
-					<h1>Upload Images</h1>
+					<div>
+						<h1>Upload Images</h1>
+						<p className="AddCar-upload-images-message">
+							* Kindly upload atleast one image of the car
+							<br />
+							** 360 version is not mandatory
+						</p>
+					</div>
 					<div className="AddCar-upload-box AddCar-sides">
 						{imageTags[0]}
 						{imageTags[1]}
@@ -396,8 +443,8 @@ export default class AddCar extends React.Component {
 					</div>
 					<div className="AddCar-upload-box AddCar-middle">
 						<div className="AddCar-middle-side">
-							{imageTags[4]}
-							{imageTags[5]}
+							{imageTags[11]}
+							{imageTags[10]}
 						</div>
 						<div className="AddCar-middle-center">
 							{
@@ -427,15 +474,15 @@ export default class AddCar extends React.Component {
 							}
 						</div>
 						<div className="AddCar-middle-side">
-							{imageTags[6]}
-							{imageTags[7]}
+							{imageTags[4]}
+							{imageTags[5]}
 						</div>
 					</div>
 					<div className="AddCar-upload-box AddCar-sides">
-						{imageTags[8]}
 						{imageTags[9]}
-						{imageTags[10]}
-						{imageTags[11]}
+						{imageTags[8]}
+						{imageTags[7]}
+						{imageTags[6]}
 					</div>
 				</section>
 				<section id="uploadCarDetails">
@@ -546,6 +593,14 @@ export default class AddCar extends React.Component {
 									Submit
 							</button>
 						</div>
+					</div>
+					<div className="AddCar-details-right">
+						{this.state.errors.noImages === 1 ? 						
+						<p className="AddCar-upload-images-message">{message}</p>
+						: 
+						<div className="AddCar-preview">
+							
+						</div>}
 					</div>
 				</section></>}
 				{this.state.small &&
