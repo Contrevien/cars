@@ -3,6 +3,7 @@ import picture from '../../../assets/images/car.png';
 import _360 from '../../../assets/images/_360.png';
 import './AddCar.css';
 import { Pannellum } from "pannellum-react";
+import Toast from '../../Toast/Toast';
 
 const INIT_STATE = {
 	dragging: false,
@@ -32,7 +33,7 @@ const INIT_STATE = {
 	errors: {
 		noImages: false
 	},
-	overMe: ""
+	toast: ""
 }
 
 export default class AddCar extends React.Component {
@@ -67,24 +68,23 @@ export default class AddCar extends React.Component {
 
 	handleDrag = (e) => {
 		e.preventDefault()
-  		e.stopPropagation()
+		e.stopPropagation()
   		
 	}
 	
 	handleDragIn = (e) => {
 		e.preventDefault()
   		e.stopPropagation()
-  		this.dragCounter++ 
-  		if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
+		this.dragCounter++ 
+  		if (e.dataTransfer.files && e.dataTransfer.items.length > 0) {
 		  this.setState({dragging: true})
 		}
 	}
 	
 	handleDragOut = (e) => {
 		e.preventDefault()
-  		e.stopPropagation()
-  		this.dragCounter--
-  		if (this.dragCounter > 0) return
+		e.stopPropagation()
+		  this.dragCounter--
   		this.setState({dragging: false})
 	}
 	
@@ -92,25 +92,36 @@ export default class AddCar extends React.Component {
 		e.preventDefault()
   		e.stopPropagation()
   		this.setState({dragging: false})
-	    let reader = new FileReader();
-        let name = e.target.dataset.name;
-        let file = e.dataTransfer.files[0];
-
-        let temp = [...this.state.images];
-
-        reader.onloadend = () => {
-        	temp[parseInt(name.split("-")[1])] = reader.result;
-            this.setState({
-                images: temp
-            });
-        }
-
-        reader.readAsDataURL(file);
+		let files = e.dataTransfer.files;
+		try {
+			for(let file of files) {
+				let reader = new FileReader();
+				reader.onloadend = () => {
+					let temp = [...this.state.images];
+					console.log(parseInt(file.name.split(".")[0].substring(3)))
+					if (isNaN(parseInt(file.name.split(".")[0].substring(3)))) {
+						this.setState({
+							toast: "Please follow proper naming with number such as cam01.png"
+						})
+						return;	
+					} else {
+						temp[parseInt(file.name.split(".")[0].substring(3)) - 1] = reader.result;
+						this.setState({
+							images: temp
+						});
+					}
+				}
+				reader.readAsDataURL(file);
+			}
+		} catch {
+			this.setState({
+				toast: "Please follow proper naming with number such as cam01.png"
+			})
+		}
 	}
 
 
 	componentDidMount() {
-
 		if(window.outerWidth < 768 && window.outerHeight < 820) {
 			this.setState({
 				small: true
@@ -129,11 +140,9 @@ export default class AddCar extends React.Component {
 		    div.current.addEventListener('drop', this.handleDrop)
 		}
 
-		// let _div = this._360ref.current;
-		// _div.current.addEventListener('dragenter', this.handleDragIn)
-	 //    _div.current.addEventListener('dragleave', this.handleDragOut)
-	 //    _div.current.addEventListener('dragover', this.handleDrag)
-	 //    _div.current.addEventListener('drop', this.handle360Drop)
+		document.body.addEventListener("drop", this.handleDrop);
+		document.body.addEventListener("dragleave", this.handleDragOut);
+		document.body.addEventListener("dragenter", this.handleDragIn);
 
 	}
 
@@ -147,32 +156,19 @@ export default class AddCar extends React.Component {
 		    div.current.addEventListener('drop', this.handleDrop)
 		}
 
-		// let _div = this._360ref.current;
-
-		// if(_div !== null) {
-		// 	_div.current.addEventListener('dragenter', this.handleDragIn)
-		//     _div.current.addEventListener('dragleave', this.handleDragOut)
-		//     _div.current.addEventListener('dragover', this.handleDrag)
-		//     _div.current.addEventListener('drop', this.handle360Drop)
-		// }
-		
-
 	}
 
-	componentWillUnmount() {
-		for(var div of this.imageRefs) {
-			if(div.current == null) continue;
-			div.current.removeEventListener('dragenter', this.handleDragIn)
-		    div.current.removeEventListener('dragleave', this.handleDragOut)
-		    div.current.removeEventListener('dragover', this.handleDrag)
-		    div.current.removeEventListener('drop', this.handleDrop)
+	toggleToast = (msg) => {
+		let toast = this.state.toast;
+		if(toast === "") {
+			this.setState({
+				toast: msg
+			})
+		} else {
+			this.setState({
+				toast: ""
+			})
 		}
-
-		// let _div = this._360ref.current;
-		// _div.current.removeEventListener('dragenter', this.handleDragIn)
-	 //    _div.current.removeEventListener('dragleave', this.handleDragOut)
-	 //    _div.current.removeEventListener('dragover', this.handleDrag)
-	 //    _div.current.removeEventListener('drop', this.handle360Drop)
 	}
 
 
@@ -386,7 +382,7 @@ export default class AddCar extends React.Component {
 		for (let img in images) {
 			if(images[img] === "") {
 				imageTags.push(
-					<label data-name={"img-" + img} className={this.state.overMe === img ? "AddCar-image-upload-over"
+					<label data-name={"img-" + img} className={this.state.dragging ? "AddCar-image-upload AddCar-over"
 						: "AddCar-image-upload"} 
 						ref={this.imageRefs[img]}
 						onMouseEnter={(e) => this.toggleDrop(e, img)}
@@ -404,14 +400,13 @@ export default class AddCar extends React.Component {
 							title="Remove" 
 							data-name={"img-" + img} 
 							onClick={(e) => this.handleImage(e, true)}>
-								&#10006;
-							</span>
+							&#10006;
+						</span>
 					</div>
 				)
 			}
 			
 		}
-
 
 		return(
 			<div className="AddCar">
@@ -605,6 +600,7 @@ export default class AddCar extends React.Component {
 				</section></>}
 				{this.state.small &&
 				<div className="msg"><p>The website is not yet supported on smaller devices</p></div>}
+				{this.state.toast !== "" ? <Toast close={this.toggleToast} message={this.state.toast} /> : null}
 			</div>
 		)
 	}
