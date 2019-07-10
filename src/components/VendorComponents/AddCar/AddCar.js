@@ -4,6 +4,19 @@ import _360 from '../../../assets/images/_360.png';
 import './AddCar.css';
 import { Pannellum } from "pannellum-react";
 import Toast from '../../Toast/Toast';
+import cam01 from '../../../assets/demo/cam01.png';
+import cam02 from '../../../assets/demo/cam02.png';
+import cam03 from '../../../assets/demo/cam03.png';
+import cam04 from '../../../assets/demo/cam04.png';
+import cam05 from '../../../assets/demo/cam05.png';
+import cam06 from '../../../assets/demo/cam06.png';
+import cam07 from '../../../assets/demo/cam07.png';
+import cam08 from '../../../assets/demo/cam08.png';
+import cam09 from '../../../assets/demo/cam09.png';
+import cam10 from '../../../assets/demo/cam10.png';
+import cam11 from '../../../assets/demo/cam11.png';
+import cam12 from '../../../assets/demo/cam12.png';
+import _360demo from '../../../assets/demo/_360.jpg';
 
 const INIT_STATE = {
 	dragging: false,
@@ -371,6 +384,37 @@ export default class AddCar extends React.Component {
 		this.props.submit(toSend);
 	}
 
+	showDemo = () => {
+		let images = [...this.state.images];
+		let demoImages = [cam01, cam02, cam03, cam04, cam05, cam06, cam07, cam08, cam09, cam10, cam11, cam12];
+		for(let i in images) {
+			images[i] = demoImages[i];
+		}
+		let details = {...this.state.carDetails};
+		details["color"] = "Nero";
+		details["displacement"] = "1598"
+		details["doors"] = "4"
+		details["fuel"] = "Diesel"
+		details["gearType"] = "man"
+		details["gears"] = "7"
+		details["make"] = "Alfa Romeo Giulietta"
+		details["model"] = "(2010) 1.6 JTDm-2 105 CV Distinctive"
+		details["paint"] = "Metallic"
+		details["price"] = "11000"
+		details["type"] = "used"
+		details["firstReg"] = "06/2014"
+		details["usedKms"] = "71747"
+		details["seats"] = "5"
+		details["weight"] = "1350"
+
+		this.setState({
+			images: images,
+			carDetails: details,
+			_360: _360demo,
+			submitReady: true
+		})
+	}
+
 	render() {
 
 		const { imagesReq, images, carDetails } = this.state;
@@ -414,10 +458,7 @@ export default class AddCar extends React.Component {
                     <h2>cars<span>360</span></h2>
                     <nav>
                         <ul>
-                            <li>Home</li>
-                            <li>Cars</li>
-                            <li>Contact</li>
-                            <li>About</li>
+                            <li className="ShowDemo-button" onClick={this.showDemo}>Demo</li>
                         </ul>
                     </nav>
                 </header>

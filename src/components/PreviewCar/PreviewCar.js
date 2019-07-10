@@ -186,14 +186,6 @@ export default class PreviewCar extends React.Component {
             <>
                 <header>
                     <h2>cars<span>360</span></h2>
-                    <nav>
-                        <ul>
-                            <li>Home</li>
-                            <li>Cars</li>
-                            <li>Contact</li>
-                            <li>About</li>
-                        </ul>
-                    </nav>
                 </header>
                 <div className="PreviewCar">
                     <div id="slider" className="slider">
